@@ -1,0 +1,7 @@
+name: RealEstate
+version: ${project.version}
+main: com.github.beastyboo.realestate.application.RealEstatePlugin
+depend: [GriefPrevention, Vault]
+authors: [BeastyBoo]
+description: A addon to GriefPrevention, making you able to sell your claims/subclaims as properties. 
+website: https://github.com/BeastyBoo
