@@ -17,13 +17,13 @@ public interface PropertyRepository {
 
     void close();
 
-    boolean displayGUI(Player player);
-
     boolean createProperty(String name, Player player, Location location, double price);
 
     boolean deleteProperty(Player player, Location location);
 
     boolean buyProperty(Player player, Location location);
+
+    boolean changePropertyPrice(Player player, Location location, double price);
 
     Optional<Property> getPropertyByID(UUID uuid);
 

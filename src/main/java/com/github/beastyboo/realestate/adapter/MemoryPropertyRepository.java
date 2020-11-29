@@ -37,11 +37,6 @@ public class MemoryPropertyRepository implements PropertyRepository {
     }
 
     @Override
-    public boolean displayGUI(Player player) {
-        return false;
-    }
-
-    @Override
     public boolean createProperty(String name, Player player, Location location, double price) {
         Optional<Property> property = this.getPropertyByLocation(location);
 
@@ -99,6 +94,22 @@ public class MemoryPropertyRepository implements PropertyRepository {
         property.get().getClaim().allowAccess(player);
 
         propertyMemory.remove(property.get().getId(), property.get());
+        return true;
+    }
+
+    @Override
+    public boolean changePropertyPrice(Player player, Location location, double price) {
+        Optional<Property> property = this.getPropertyByLocation(location);
+
+        if(!property.isPresent()) {
+            return false;
+        }
+
+        if(player.getUniqueId() != property.get().getSeller() || !player.isOp()) {
+            return false;
+        }
+
+        property.get().setPrice(price);
         return true;
     }
 

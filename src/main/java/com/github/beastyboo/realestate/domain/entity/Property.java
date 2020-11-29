@@ -14,7 +14,7 @@ public class Property {
     private final UUID seller;
     private final UUID id;
     private final Claim claim;
-    private final double price;
+    private double price;
     private final Location location;
 
     public static class Builder {
@@ -69,6 +69,10 @@ public class Property {
 
     public Location getLocation() {
         return location;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
     }
 
     @Override
