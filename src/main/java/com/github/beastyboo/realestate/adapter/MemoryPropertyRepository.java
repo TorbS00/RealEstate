@@ -102,7 +102,6 @@ public class MemoryPropertyRepository implements PropertyRepository {
         return true;
     }
 
-
     @Override
     public Optional<Property> getPropertyByID(UUID uuid) {
         return Optional.ofNullable(propertyMemory.get(uuid));

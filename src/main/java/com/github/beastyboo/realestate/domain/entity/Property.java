@@ -57,4 +57,42 @@ public class Property {
     public double getPrice() {
         return price;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Property property = (Property) o;
+
+        if (Double.compare(property.getPrice(), getPrice()) != 0) return false;
+        if (!name.equals(property.name)) return false;
+        if (!getSeller().equals(property.getSeller())) return false;
+        if (!getId().equals(property.getId())) return false;
+        return getClaim().equals(property.getClaim());
+    }
+
+    @Override
+    public int hashCode() {
+        int result;
+        long temp;
+        result = name.hashCode();
+        result = 31 * result + getSeller().hashCode();
+        result = 31 * result + getId().hashCode();
+        result = 31 * result + getClaim().hashCode();
+        temp = Double.doubleToLongBits(getPrice());
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Property{" +
+                "name='" + name + '\'' +
+                ", seller=" + seller +
+                ", id=" + id +
+                ", claim=" + claim.getID() +
+                ", price=" + price +
+                '}';
+    }
 }
