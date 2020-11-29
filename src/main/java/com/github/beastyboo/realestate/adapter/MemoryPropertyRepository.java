@@ -55,7 +55,7 @@ public class MemoryPropertyRepository implements PropertyRepository {
             return false;
         }
 
-        Property newProperty = new Property.Builder(name, claim.ownerID, claim, price).build();
+        Property newProperty = new Property.Builder(name, claim.ownerID, claim, price, player.getLocation()).build();
         propertyMemory.put(newProperty.getId(), newProperty);
         return true;
     }

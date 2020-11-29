@@ -8,7 +8,10 @@ This plugin made to target directly for servers using Vault and GriefPrevention.
 * /property create <name> <price>
 * /property buy
 * /property delete
-* /property list/gui 
+* /property list/gui
+
+When a player buys a property, the ownership depends on the claim-type. If the claim is a subclaim, they will only be trusted, and the receipt is stored in a file, easily to access for that player in case he gets untrusted.
+If the claim is a normal claim, and not a subclaim, then the ownership will be transferred to the buyer, including the claim blocks, as the seller gets his claimblocks back.
 
 # Permissions:
 * property.help
