@@ -38,10 +38,13 @@ public class RealEstate {
             plugin.getServer().getPluginManager().disablePlugin(plugin);
             return;
         }
+
+        RealEstateAPI.getINSTANCE().load();
     }
 
     void close() {
         Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Closing down " + plugin.getName());
+        RealEstateAPI.getINSTANCE().close();
     }
 
     public JavaPlugin getPlugin() {

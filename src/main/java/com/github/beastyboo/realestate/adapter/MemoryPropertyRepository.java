@@ -1,14 +1,21 @@
 package com.github.beastyboo.realestate.adapter;
 
 import com.github.beastyboo.realestate.application.RealEstate;
+import com.github.beastyboo.realestate.config.RealEstateAPI;
 import com.github.beastyboo.realestate.domain.entity.Property;
+import com.github.beastyboo.realestate.domain.entity.PropertyPlayer;
+import com.github.beastyboo.realestate.domain.holder.PropertyInventoryHolder;
 import com.github.beastyboo.realestate.domain.port.PropertyRepository;
+import com.github.beastyboo.realestate.util.InventoryUtil;
 import me.ryanhamshire.GriefPrevention.Claim;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 
+import java.time.LocalDate;
 import java.util.*;
 
 /**
@@ -44,13 +51,17 @@ public class MemoryPropertyRepository implements PropertyRepository {
             return false;
         }
 
-        Claim claim = core.getGriefPrevention().getClaimAt(location, true, null);
+        Claim claim = core.getGriefPrevention().getClaimAt(location, false, null);
 
         if(claim.ownerID != player.getUniqueId()) {
             return false;
         }
 
+        RealEstateAPI.getINSTANCE().createPropertyPlayer(player.getUniqueId());
+        Optional<PropertyPlayer> propertyPlayer = RealEstateAPI.getINSTANCE().getPropertyPlayerByID(player.getUniqueId());
+
         Property newProperty = new Property.Builder(name, claim.ownerID, claim, price, player.getLocation()).build();
+        propertyPlayer.get().getProperties().add(newProperty);
         propertyMemory.put(newProperty.getId(), newProperty);
         return true;
     }
@@ -67,8 +78,10 @@ public class MemoryPropertyRepository implements PropertyRepository {
             return false;
         }
 
+        Optional<PropertyPlayer> propertyPlayer = RealEstateAPI.getINSTANCE().getPropertyPlayerByID(property.get().getSeller());
+        propertyPlayer.get().getProperties().remove(property.get());
         propertyMemory.remove(property.get().getId(), property.get());
-        return false;
+        return true;
     }
 
     @Override
@@ -93,6 +106,11 @@ public class MemoryPropertyRepository implements PropertyRepository {
         econ.depositPlayer(Bukkit.getOfflinePlayer(property.get().getSeller()), price);
         property.get().getClaim().allowAccess(player);
 
+        LocalDate date = LocalDate.now();
+        RealEstateAPI.getINSTANCE().createReceipt(player.getUniqueId(), property.get().getSeller(), price, date);
+        Optional<PropertyPlayer> propertySeller = RealEstateAPI.getINSTANCE().getPropertyPlayerByID(property.get().getSeller());
+        propertySeller.get().getProperties().remove(property.get());
+
         propertyMemory.remove(property.get().getId(), property.get());
         return true;
     }
@@ -115,7 +133,31 @@ public class MemoryPropertyRepository implements PropertyRepository {
 
     @Override
     public boolean viewAllPropertiesGUI(Player player) {
-        return false;
+
+        final Map<Integer, Property> propertyBySlot = new HashMap<>();
+        final Inventory inventory = Bukkit.createInventory(new PropertyInventoryHolder(propertyBySlot), 54, "§cAll Properties");
+        this.drawPropertyInventory(inventory, propertyBySlot);
+
+        player.openInventory(inventory);
+
+        return true;
+    }
+
+    private void drawPropertyInventory(Inventory inventory, Map<Integer, Property> propertyBySlot) {
+        int i = 0;
+        final List<String> lore = new ArrayList<>();
+
+        for(Property property : propertyMemory.values()) {
+            lore.clear();
+
+            lore.add("Name: " + property.getName());
+            lore.add("Seller: " + Bukkit.getOfflinePlayer(property.getSeller()).getName());
+            lore.add("Price: " + String.valueOf(property.getPrice()));
+
+            inventory.setItem(i, InventoryUtil.INSTANCE.itemFactory(Material.CHEST, property.getName(), lore));
+            propertyBySlot.put(i, property);
+            i++;
+        }
     }
 
     @Override

@@ -1,6 +1,5 @@
 package com.github.beastyboo.realestate.domain.entity;
 
-import java.time.LocalDate;
 import java.util.UUID;
 
 /**
@@ -12,24 +11,23 @@ public class Receipt {
     private final UUID seller;
     private final UUID id;
     private final double price;
-    private final LocalDate date;
+    private final String date;
 
     public static class Builder {
         private final UUID buyer;
         private final UUID seller;
-        private final UUID id;
+        private final UUID id = UUID.randomUUID();
         private final double price;
-        private final LocalDate date;
+        private final String date;
 
-        public Builder(UUID buyer, UUID seller, UUID id, double price, LocalDate date) {
+        public Builder(UUID buyer, UUID seller, double price, String date) {
             this.buyer = buyer;
             this.seller = seller;
-            this.id = id;
             this.price = price;
             this.date = date;
         }
 
-        private Receipt build() {
+        public Receipt build() {
             return new Receipt(this);
         }
 
@@ -59,7 +57,7 @@ public class Receipt {
         return price;
     }
 
-    public LocalDate getDate() {
+    public String getDate() {
         return date;
     }
 }
