@@ -1,6 +1,7 @@
 package com.github.beastyboo.realestate.domain.entity;
 
 import me.ryanhamshire.GriefPrevention.Claim;
+import org.bukkit.Location;
 
 import java.util.UUID;
 
@@ -14,6 +15,7 @@ public class Property {
     private final UUID id;
     private final Claim claim;
     private final double price;
+    private final Location location;
 
     public static class Builder {
         private final String name;
@@ -21,12 +23,14 @@ public class Property {
         private final UUID id = UUID.randomUUID();
         private final Claim claim;
         private final double price;
+        private final Location location;
 
-        public Builder(String name, UUID seller, Claim claim, double price) {
+        public Builder(String name, UUID seller, Claim claim, double price, Location location) {
             this.name = name;
             this.seller = seller;
             this.claim = claim;
             this.price = price;
+            this.location = location;
         }
 
         public Property build() {
@@ -40,6 +44,11 @@ public class Property {
         id = builder.id;
         claim = builder.claim;
         price = builder.price;
+        location = builder.location;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public UUID getSeller() {
@@ -56,6 +65,10 @@ public class Property {
 
     public double getPrice() {
         return price;
+    }
+
+    public Location getLocation() {
+        return location;
     }
 
     @Override
