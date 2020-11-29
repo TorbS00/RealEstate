@@ -83,22 +83,24 @@ public class Property {
         Property property = (Property) o;
 
         if (Double.compare(property.getPrice(), getPrice()) != 0) return false;
-        if (!name.equals(property.name)) return false;
+        if (!getName().equals(property.getName())) return false;
         if (!getSeller().equals(property.getSeller())) return false;
         if (!getId().equals(property.getId())) return false;
-        return getClaim().equals(property.getClaim());
+        if (!getClaim().equals(property.getClaim())) return false;
+        return getLocation().equals(property.getLocation());
     }
 
     @Override
     public int hashCode() {
         int result;
         long temp;
-        result = name.hashCode();
+        result = getName().hashCode();
         result = 31 * result + getSeller().hashCode();
         result = 31 * result + getId().hashCode();
         result = 31 * result + getClaim().hashCode();
         temp = Double.doubleToLongBits(getPrice());
         result = 31 * result + (int) (temp ^ (temp >>> 32));
+        result = 31 * result + getLocation().hashCode();
         return result;
     }
 
@@ -106,9 +108,7 @@ public class Property {
     public String toString() {
         return "Property{" +
                 "name='" + name + '\'' +
-                ", seller=" + seller +
                 ", id=" + id +
-                ", claim=" + claim.getID() +
                 ", price=" + price +
                 '}';
     }

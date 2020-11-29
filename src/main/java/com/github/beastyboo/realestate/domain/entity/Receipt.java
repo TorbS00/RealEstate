@@ -60,4 +60,39 @@ public class Receipt {
     public String getDate() {
         return date;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Receipt receipt = (Receipt) o;
+
+        if (Double.compare(receipt.getPrice(), getPrice()) != 0) return false;
+        if (!getBuyer().equals(receipt.getBuyer())) return false;
+        if (!getSeller().equals(receipt.getSeller())) return false;
+        if (!getId().equals(receipt.getId())) return false;
+        return getDate().equals(receipt.getDate());
+    }
+
+    @Override
+    public int hashCode() {
+        int result;
+        long temp;
+        result = getBuyer().hashCode();
+        result = 31 * result + getSeller().hashCode();
+        result = 31 * result + getId().hashCode();
+        temp = Double.doubleToLongBits(getPrice());
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        result = 31 * result + getDate().hashCode();
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Receipt{" +
+                "id=" + id +
+                ", date='" + date + '\'' +
+                '}';
+    }
 }

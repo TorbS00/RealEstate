@@ -143,23 +143,6 @@ public class MemoryPropertyRepository implements PropertyRepository {
         return true;
     }
 
-    private void drawPropertyInventory(Inventory inventory, Map<Integer, Property> propertyBySlot) {
-        int i = 0;
-        final List<String> lore = new ArrayList<>();
-
-        for(Property property : propertyMemory.values()) {
-            lore.clear();
-
-            lore.add("Name: " + property.getName());
-            lore.add("Seller: " + Bukkit.getOfflinePlayer(property.getSeller()).getName());
-            lore.add("Price: " + String.valueOf(property.getPrice()));
-
-            inventory.setItem(i, RealEstateUtil.INSTANCE.itemFactory(Material.CHEST, property.getName(), lore));
-            propertyBySlot.put(i, property);
-            i++;
-        }
-    }
-
     @Override
     public Optional<Property> getPropertyByID(UUID uuid) {
         return Optional.ofNullable(propertyMemory.get(uuid));
@@ -182,6 +165,23 @@ public class MemoryPropertyRepository implements PropertyRepository {
     @Override
     public Set<Property> getAllProperties() {
         return new HashSet<>(propertyMemory.values());
+    }
+
+    private void drawPropertyInventory(Inventory inventory, Map<Integer, Property> propertyBySlot) {
+        int i = 0;
+        final List<String> lore = new ArrayList<>();
+
+        for(Property property : propertyMemory.values()) {
+            lore.clear();
+
+            lore.add("Name: " + property.getName());
+            lore.add("Seller: " + Bukkit.getOfflinePlayer(property.getSeller()).getName());
+            lore.add("Price: " + String.valueOf(property.getPrice()));
+
+            inventory.setItem(i, RealEstateUtil.INSTANCE.itemFactory(Material.CHEST, property.getName(), lore));
+            propertyBySlot.put(i, property);
+            i++;
+        }
     }
 
 }
