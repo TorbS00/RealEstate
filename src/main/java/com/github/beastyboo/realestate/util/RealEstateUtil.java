@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * Created by Torbie on 29.11.2020.
  */
-public enum InventoryUtil {
+public enum RealEstateUtil {
 
     INSTANCE;
 

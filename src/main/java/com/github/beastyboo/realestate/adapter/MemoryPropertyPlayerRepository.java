@@ -7,7 +7,7 @@ import com.github.beastyboo.realestate.domain.entity.Receipt;
 import com.github.beastyboo.realestate.domain.holder.PropertyInventoryHolder;
 import com.github.beastyboo.realestate.domain.holder.ReceiptInventoryHolder;
 import com.github.beastyboo.realestate.domain.port.PropertyPlayerRepository;
-import com.github.beastyboo.realestate.util.InventoryUtil;
+import com.github.beastyboo.realestate.util.RealEstateUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -120,7 +120,7 @@ public class MemoryPropertyPlayerRepository implements PropertyPlayerRepository{
             lore.add("Date: " + receipt.getDate());
             lore.add("Price: " + String.valueOf(receipt.getPrice()));
 
-            inventory.setItem(i, InventoryUtil.INSTANCE.itemFactory(Material.PAPER, receipt.getDate(), lore));
+            inventory.setItem(i, RealEstateUtil.INSTANCE.itemFactory(Material.PAPER, receipt.getDate(), lore));
             receiptBySlot.put(i, receipt);
             i++;
         }
@@ -137,7 +137,7 @@ public class MemoryPropertyPlayerRepository implements PropertyPlayerRepository{
             lore.add("Seller: " + Bukkit.getOfflinePlayer(property.getSeller()).getName());
             lore.add("Price: " + String.valueOf(property.getPrice()));
 
-            inventory.setItem(i, InventoryUtil.INSTANCE.itemFactory(Material.CHEST, property.getName(), lore));
+            inventory.setItem(i, RealEstateUtil.INSTANCE.itemFactory(Material.CHEST, property.getName(), lore));
             propertyBySlot.put(i, property);
             i++;
         }

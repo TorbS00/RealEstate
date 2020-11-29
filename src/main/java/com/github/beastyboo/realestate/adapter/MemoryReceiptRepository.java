@@ -6,7 +6,7 @@ import com.github.beastyboo.realestate.domain.entity.PropertyPlayer;
 import com.github.beastyboo.realestate.domain.entity.Receipt;
 import com.github.beastyboo.realestate.domain.holder.ReceiptInventoryHolder;
 import com.github.beastyboo.realestate.domain.port.ReceiptRepository;
-import com.github.beastyboo.realestate.util.InventoryUtil;
+import com.github.beastyboo.realestate.util.RealEstateUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -84,7 +84,7 @@ public class MemoryReceiptRepository implements ReceiptRepository{
             lore.add("Date: " + receipt.getDate());
             lore.add("Price: " + String.valueOf(receipt.getPrice()));
 
-            inventory.setItem(i, InventoryUtil.INSTANCE.itemFactory(Material.PAPER, receipt.getDate(), lore));
+            inventory.setItem(i, RealEstateUtil.INSTANCE.itemFactory(Material.PAPER, receipt.getDate(), lore));
             receiptBySlot.put(i, receipt);
             i++;
         }

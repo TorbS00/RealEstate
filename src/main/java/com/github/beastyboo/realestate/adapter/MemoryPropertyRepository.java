@@ -6,7 +6,7 @@ import com.github.beastyboo.realestate.domain.entity.Property;
 import com.github.beastyboo.realestate.domain.entity.PropertyPlayer;
 import com.github.beastyboo.realestate.domain.holder.PropertyInventoryHolder;
 import com.github.beastyboo.realestate.domain.port.PropertyRepository;
-import com.github.beastyboo.realestate.util.InventoryUtil;
+import com.github.beastyboo.realestate.util.RealEstateUtil;
 import me.ryanhamshire.GriefPrevention.Claim;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
@@ -154,7 +154,7 @@ public class MemoryPropertyRepository implements PropertyRepository {
             lore.add("Seller: " + Bukkit.getOfflinePlayer(property.getSeller()).getName());
             lore.add("Price: " + String.valueOf(property.getPrice()));
 
-            inventory.setItem(i, InventoryUtil.INSTANCE.itemFactory(Material.CHEST, property.getName(), lore));
+            inventory.setItem(i, RealEstateUtil.INSTANCE.itemFactory(Material.CHEST, property.getName(), lore));
             propertyBySlot.put(i, property);
             i++;
         }
