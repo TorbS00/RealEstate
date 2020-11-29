@@ -3,7 +3,9 @@ package com.github.beastyboo.realestate.adapter;
 import com.github.beastyboo.realestate.application.RealEstate;
 import com.github.beastyboo.realestate.domain.entity.Receipt;
 import com.github.beastyboo.realestate.domain.port.ReceiptRepository;
+import org.bukkit.entity.Player;
 
+import java.time.LocalDate;
 import java.util.*;
 
 /**
@@ -27,6 +29,16 @@ public class MemoryReceiptRepository implements ReceiptRepository{
     @Override
     public void close() {
 
+    }
+
+    @Override
+    public boolean createReceipt(UUID buyer, UUID seller, double price, LocalDate date) {
+        return false;
+    }
+
+    @Override
+    public boolean viewAllReceiptsGUI(Player player) {
+        return false;
     }
 
     @Override

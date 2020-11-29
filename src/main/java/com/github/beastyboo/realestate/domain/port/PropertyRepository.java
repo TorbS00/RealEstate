@@ -25,6 +25,8 @@ public interface PropertyRepository {
 
     boolean changePropertyPrice(Player player, Location location, double price);
 
+    boolean viewAllPropertiesGUI(Player player);
+
     Optional<Property> getPropertyByID(UUID uuid);
 
     Optional<Property> getPropertyByLocation(Location location);

@@ -5,18 +5,19 @@ import com.github.beastyboo.realestate.domain.entity.Property;
 import com.github.beastyboo.realestate.domain.entity.PropertyPlayer;
 import com.github.beastyboo.realestate.domain.entity.Receipt;
 import com.github.beastyboo.realestate.domain.port.PropertyPlayerRepository;
+import org.bukkit.entity.Player;
 
 import java.util.*;
 
 /**
  * Created by Torbie on 29.11.2020.
  */
-public class MemoryPropertyPlayer implements PropertyPlayerRepository{
+public class MemoryPropertyPlayerRepository implements PropertyPlayerRepository{
 
     private final RealEstate core;
     private final Map<UUID, PropertyPlayer> memoryPropertyPlayer;
 
-    public MemoryPropertyPlayer(RealEstate core) {
+    public MemoryPropertyPlayerRepository(RealEstate core) {
         this.core = core;
         this.memoryPropertyPlayer = new HashMap<>();
     }
@@ -47,6 +48,16 @@ public class MemoryPropertyPlayer implements PropertyPlayerRepository{
         memoryPropertyPlayer.put(uuid, newPropertyPlayer);
 
         return true;
+    }
+
+    @Override
+    public boolean viewYourPropertiesGUI(Player player) {
+        return false;
+    }
+
+    @Override
+    public boolean viewYourReceiptsGUI(Player player) {
+        return false;
     }
 
     @Override

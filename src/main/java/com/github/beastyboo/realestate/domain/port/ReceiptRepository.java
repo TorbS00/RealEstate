@@ -1,7 +1,9 @@
 package com.github.beastyboo.realestate.domain.port;
 
 import com.github.beastyboo.realestate.domain.entity.Receipt;
+import org.bukkit.entity.Player;
 
+import java.time.LocalDate;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -14,6 +16,10 @@ public interface ReceiptRepository {
     void load();
 
     void close();
+
+    boolean createReceipt(UUID buyer, UUID seller, double price, LocalDate date);
+
+    boolean viewAllReceiptsGUI(Player player);
 
     Optional<Receipt> getReceipt(UUID uuid);
 

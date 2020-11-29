@@ -1,6 +1,6 @@
 package com.github.beastyboo.realestate.application;
 
-import com.github.beastyboo.realestate.config.ManualConfig;
+import com.github.beastyboo.realestate.config.RealEstateAPI;
 import me.ryanhamshire.GriefPrevention.DataStore;
 import me.ryanhamshire.GriefPrevention.GriefPrevention;
 import net.milkbowl.vault.economy.Economy;
@@ -15,12 +15,12 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class RealEstate {
 
     private final JavaPlugin plugin;
-    private final ManualConfig config;
+    private final RealEstateAPI api;
     private Economy economy;
 
     public RealEstate(JavaPlugin plugin) {
         this.plugin = plugin;
-        config = new ManualConfig(this);
+        api = new RealEstateAPI(this);
         economy = null;
     }
 
@@ -38,7 +38,6 @@ public class RealEstate {
             plugin.getServer().getPluginManager().disablePlugin(plugin);
             return;
         }
-
     }
 
     void close() {
@@ -63,10 +62,6 @@ public class RealEstate {
 
     public DataStore getGriefPrevention() {
         return GriefPrevention.instance.dataStore;
-    }
-
-    public ManualConfig getConfig() {
-        return config;
     }
 
     public Economy getEconomy() {

@@ -3,6 +3,7 @@ package com.github.beastyboo.realestate.domain.port;
 import com.github.beastyboo.realestate.domain.entity.Property;
 import com.github.beastyboo.realestate.domain.entity.PropertyPlayer;
 import com.github.beastyboo.realestate.domain.entity.Receipt;
+import org.bukkit.entity.Player;
 
 import java.util.Optional;
 import java.util.Set;
@@ -18,6 +19,10 @@ public interface PropertyPlayerRepository {
     void close();
 
     boolean createPropertyPlayer(UUID uuid);
+
+    boolean viewYourPropertiesGUI(Player player);
+
+    boolean viewYourReceiptsGUI(Player player);
 
     Optional<PropertyPlayer> getPropertyPlayerByID(UUID uuid);
 

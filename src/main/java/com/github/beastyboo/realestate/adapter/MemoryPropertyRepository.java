@@ -114,6 +114,11 @@ public class MemoryPropertyRepository implements PropertyRepository {
     }
 
     @Override
+    public boolean viewAllPropertiesGUI(Player player) {
+        return false;
+    }
+
+    @Override
     public Optional<Property> getPropertyByID(UUID uuid) {
         return Optional.ofNullable(propertyMemory.get(uuid));
     }
