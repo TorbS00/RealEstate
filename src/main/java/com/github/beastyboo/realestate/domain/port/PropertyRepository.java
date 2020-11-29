@@ -1,7 +1,6 @@
 package com.github.beastyboo.realestate.domain.port;
 
 import com.github.beastyboo.realestate.domain.entity.Property;
-import me.ryanhamshire.GriefPrevention.Claim;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -20,11 +19,11 @@ public interface PropertyRepository {
 
     boolean displayGUI(Player player);
 
-    boolean createProperty(UUID player, UUID id, Claim claim, double price);
+    boolean createProperty(String name, Player player, Location location, double price);
 
-    boolean deleteProperty(Property property);
+    boolean deleteProperty(Player player, Location location);
 
-    boolean buyProperty(Property property);
+    boolean buyProperty(Player player, Location location);
 
     Optional<Property> getPropertyByID(UUID uuid);
 
