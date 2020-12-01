@@ -133,11 +133,19 @@ public class MemoryPropertyRepository implements PropertyRepository {
 
     @Override
     public boolean viewAllPropertiesGUI(Player player) {
-
         final Map<Integer, Property> propertyBySlot = new HashMap<>();
         final Inventory inventory = Bukkit.createInventory(new PropertyInventoryHolder(propertyBySlot), 54, "§cAll Properties");
         this.drawPropertyInventory(inventory, propertyBySlot);
+        player.openInventory(inventory);
 
+        return true;
+    }
+
+    @Override
+    public boolean viewTargetPropertiesGUI(Player player, Player target) {
+        final Map<Integer, Property> propertyBySlot = new HashMap<>();
+        final Inventory inventory = Bukkit.createInventory(new PropertyInventoryHolder(propertyBySlot), 54, "§c" + target.getName() + "'s Properties");
+        this.drawTargetPropertyInventory(target, inventory, propertyBySlot);
         player.openInventory(inventory);
 
         return true;
@@ -184,4 +192,20 @@ public class MemoryPropertyRepository implements PropertyRepository {
         }
     }
 
+    private void drawTargetPropertyInventory(Player target, Inventory inventory, Map<Integer, Property> propertyBySlot) {
+        int i = 0;
+        final List<String> lore = new ArrayList<>();
+
+        for(Property property : RealEstateAPI.getINSTANCE().getYourProperties(target.getUniqueId())) {
+            lore.clear();
+
+            lore.add("Name: " + property.getName());
+            lore.add("Seller: " + Bukkit.getOfflinePlayer(property.getSeller()).getName());
+            lore.add("Price: " + String.valueOf(property.getPrice()));
+
+            inventory.setItem(i, RealEstateUtil.INSTANCE.itemFactory(Material.CHEST, property.getName(), lore));
+            propertyBySlot.put(i, property);
+            i++;
+        }
+    }
 }

@@ -98,6 +98,10 @@ public class RealEstateAPI {
         return propertyRepository.viewAllPropertiesGUI(player);
     }
 
+    public boolean viewTargetPropertiesGUI(Player player, Player target) {
+        return propertyRepository.viewTargetPropertiesGUI(player, target);
+    }
+
     public Optional<Property> getPropertyByID(UUID uuid) {
         return propertyRepository.getPropertyByID(uuid);
     }
@@ -116,6 +120,10 @@ public class RealEstateAPI {
 
     public boolean viewAllReceiptsGUI(Player player) {
         return receiptRepository.viewAllReceiptsGUI(player);
+    }
+
+    public boolean viewTargetReceiptsGUI(Player player, Player target) {
+        return receiptRepository.viewTargetReceiptsGUI(player, target);
     }
 
     public Optional<Receipt> getReceipt(UUID uuid) {

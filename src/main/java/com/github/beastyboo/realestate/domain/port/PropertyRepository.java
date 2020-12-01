@@ -27,6 +27,8 @@ public interface PropertyRepository {
 
     boolean viewAllPropertiesGUI(Player player);
 
+    boolean viewTargetPropertiesGUI(Player player, Player target);
+
     Optional<Property> getPropertyByID(UUID uuid);
 
     Optional<Property> getPropertyByLocation(Location location);

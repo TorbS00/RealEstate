@@ -21,6 +21,8 @@ public interface ReceiptRepository {
 
     boolean viewAllReceiptsGUI(Player player);
 
+    boolean viewTargetReceiptsGUI(Player player, Player target);
+
     Optional<Receipt> getReceipt(UUID uuid);
 
     Set<Receipt> getAllReceipts();

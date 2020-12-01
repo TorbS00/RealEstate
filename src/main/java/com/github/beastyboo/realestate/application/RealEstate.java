@@ -1,5 +1,7 @@
 package com.github.beastyboo.realestate.application;
 
+import co.aikar.commands.PaperCommandManager;
+import com.github.beastyboo.realestate.command.PropertyCmd;
 import com.github.beastyboo.realestate.config.RealEstateAPI;
 import me.ryanhamshire.GriefPrevention.DataStore;
 import me.ryanhamshire.GriefPrevention.GriefPrevention;
@@ -9,6 +11,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.Arrays;
+
 /**
  * Created by Torbie on 29.11.2020.
  */
@@ -16,11 +20,13 @@ public class RealEstate {
 
     private final JavaPlugin plugin;
     private final RealEstateAPI api;
+    private final PaperCommandManager manager;
     private Economy economy;
 
     public RealEstate(JavaPlugin plugin) {
         this.plugin = plugin;
         api = new RealEstateAPI(this);
+        manager = new PaperCommandManager(plugin);
         economy = null;
     }
 
@@ -38,6 +44,7 @@ public class RealEstate {
             plugin.getServer().getPluginManager().disablePlugin(plugin);
             return;
         }
+        this.registerCommands(manager);
 
         RealEstateAPI.getINSTANCE().load();
     }
@@ -61,6 +68,20 @@ public class RealEstate {
         }
         economy = rsp.getProvider();
         return economy != null;
+    }
+
+    private void registerCommands(PaperCommandManager manager) {
+        manager.enableUnstableAPI("help");
+
+        manager.getCommandCompletions().registerAsyncCompletion("property", c -> Arrays.asList("create", "buy", "delete", "gui", "me", "change price", "view"));
+
+        manager.registerCommand(new PropertyCmd());
+
+        manager.setDefaultExceptionHandler((command, registeredCommand, sender, args, t) -> {
+            plugin.getLogger().warning("Error occured while executing command: " + command.getName());
+            return false;
+        });
+
     }
 
     public DataStore getGriefPrevention() {

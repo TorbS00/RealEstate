@@ -62,6 +62,16 @@ public class MemoryReceiptRepository implements ReceiptRepository{
     }
 
     @Override
+    public boolean viewTargetReceiptsGUI(Player player, Player target) {
+        final Map<Integer, Receipt> receiptBySlot = new HashMap<>();
+        final Inventory inventory = Bukkit.createInventory(new ReceiptInventoryHolder(receiptBySlot), 54, "§c" + target.getName() + "'s Receipts");
+        this.drawTargetReceiptInventory(target, inventory, receiptBySlot);
+
+        player.openInventory(inventory);
+        return true;
+    }
+
+    @Override
     public Optional<Receipt> getReceipt(UUID uuid) {
         return Optional.ofNullable(receiptMemory.get(uuid));
     }
@@ -76,6 +86,25 @@ public class MemoryReceiptRepository implements ReceiptRepository{
         final List<String> lore = new ArrayList<>();
 
         for(Receipt receipt : receiptMemory.values()) {
+            lore.clear();
+
+            lore.add("Buyer: " + Bukkit.getOfflinePlayer(receipt.getBuyer()));
+            lore.add("Seller: " + Bukkit.getOfflinePlayer(receipt.getSeller()));
+            lore.add("ID: " + receipt.getId().toString());
+            lore.add("Date: " + receipt.getDate());
+            lore.add("Price: " + String.valueOf(receipt.getPrice()));
+
+            inventory.setItem(i, RealEstateUtil.INSTANCE.itemFactory(Material.PAPER, receipt.getDate(), lore));
+            receiptBySlot.put(i, receipt);
+            i++;
+        }
+    }
+
+    private void drawTargetReceiptInventory(Player target, Inventory inventory, Map<Integer, Receipt> receiptBySlot) {
+        int i = 0;
+        final List<String> lore = new ArrayList<>();
+
+        for(Receipt receipt : RealEstateAPI.getINSTANCE().getYourReceipts(target.getUniqueId())) {
             lore.clear();
 
             lore.add("Buyer: " + Bukkit.getOfflinePlayer(receipt.getBuyer()));
