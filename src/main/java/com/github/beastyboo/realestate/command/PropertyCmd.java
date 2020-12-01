@@ -3,6 +3,7 @@ package com.github.beastyboo.realestate.command;
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.CommandHelp;
 import co.aikar.commands.annotation.*;
+import co.aikar.commands.bukkit.contexts.OnlinePlayer;
 import com.github.beastyboo.realestate.config.RealEstateAPI;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -14,16 +15,17 @@ import org.bukkit.entity.Player;
 @Description("The core command for all managing properties")
 public class PropertyCmd extends BaseCommand{
 
+
     @HelpCommand
-    public void cmdHelp(CommandSender sender, CommandHelp help) {
-        sender.sendMessage("§cProperty Help:");
+    @Private
+    public void cmdHelp(CommandHelp help) {
         help.showHelp();
     }
 
     @Subcommand("create")
     @Description("Creates a property")
     @CommandPermission("property.create")
-    public void cmdCreate(Player player, String name, double price) {
+    public void cmdCreate(Player player,@Name("name") String name ,@Name("price") double price) {
         RealEstateAPI.getINSTANCE().createProperty(name, player, player.getLocation(), price);
     }
 
@@ -58,14 +60,15 @@ public class PropertyCmd extends BaseCommand{
     @Subcommand("change price")
     @Description("Change the property price")
     @CommandPermission("property.change.price")
-    public void cmdChangePrice(Player player, double price) {
+    public void cmdChangePrice(Player player,@Name("price")  double price) {
         RealEstateAPI.getINSTANCE().changePropertyPrice(player, player.getLocation(), price);
     }
 
     @Subcommand("view")
     @Description("View someone's properties")
     @CommandPermission("property.view")
-    public void cmdViewTarget(Player player, Player target) {
-        RealEstateAPI.getINSTANCE().viewTargetPropertiesGUI(player, target);
+    @CommandCompletion("@players")
+    public void cmdViewTarget(Player player, @Name("player_name") OnlinePlayer target) {
+        RealEstateAPI.getINSTANCE().viewTargetPropertiesGUI(player, target.getPlayer());
     }
 }

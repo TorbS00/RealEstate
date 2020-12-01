@@ -3,6 +3,7 @@ package com.github.beastyboo.realestate.command;
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.CommandHelp;
 import co.aikar.commands.annotation.*;
+import co.aikar.commands.bukkit.contexts.OnlinePlayer;
 import com.github.beastyboo.realestate.config.RealEstateAPI;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -15,8 +16,8 @@ import org.bukkit.entity.Player;
 public class ReceiptCmd extends BaseCommand{
 
     @HelpCommand
-    public void cmdHelp(CommandSender sender, CommandHelp help) {
-        sender.sendMessage("§cReceipt Help:");
+    @Private
+    public void cmdHelp(CommandHelp help) {
         help.showHelp();
     }
 
@@ -38,8 +39,9 @@ public class ReceiptCmd extends BaseCommand{
     @Subcommand("view")
     @Description("View someone's receipts")
     @CommandPermission("receipt.view")
-    public void cmdViewTarget(Player player, Player target) {
-        RealEstateAPI.getINSTANCE().viewTargetReceiptsGUI(player, target);
+    @CommandCompletion("@players")
+    public void cmdViewTarget(Player player,@Name("player_name") OnlinePlayer target) {
+        RealEstateAPI.getINSTANCE().viewTargetReceiptsGUI(player, target.getPlayer());
     }
 
 }

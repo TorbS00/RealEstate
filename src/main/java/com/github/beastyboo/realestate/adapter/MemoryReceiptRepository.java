@@ -63,6 +63,13 @@ public class MemoryReceiptRepository implements ReceiptRepository{
 
     @Override
     public boolean viewTargetReceiptsGUI(Player player, Player target) {
+
+        Optional<PropertyPlayer> propertyPlayer = RealEstateAPI.getINSTANCE().getPropertyPlayerByID(target.getUniqueId());
+
+        if(!propertyPlayer.isPresent()) {
+            return false;
+        }
+
         final Map<Integer, Receipt> receiptBySlot = new HashMap<>();
         final Inventory inventory = Bukkit.createInventory(new ReceiptInventoryHolder(receiptBySlot), 54, "§c" + target.getName() + "'s Receipts");
         this.drawTargetReceiptInventory(target, inventory, receiptBySlot);

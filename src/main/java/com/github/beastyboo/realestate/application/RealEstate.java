@@ -2,6 +2,7 @@ package com.github.beastyboo.realestate.application;
 
 import co.aikar.commands.PaperCommandManager;
 import com.github.beastyboo.realestate.command.PropertyCmd;
+import com.github.beastyboo.realestate.command.ReceiptCmd;
 import com.github.beastyboo.realestate.config.RealEstateAPI;
 import me.ryanhamshire.GriefPrevention.DataStore;
 import me.ryanhamshire.GriefPrevention.GriefPrevention;
@@ -10,8 +11,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import java.util.Arrays;
 
 /**
  * Created by Torbie on 29.11.2020.
@@ -73,9 +72,10 @@ public class RealEstate {
     private void registerCommands(PaperCommandManager manager) {
         manager.enableUnstableAPI("help");
 
-        manager.getCommandCompletions().registerAsyncCompletion("property", c -> Arrays.asList("create", "buy", "delete", "gui", "me", "change price", "view"));
+        //manager.getCommandCompletions().registerAsyncCompletion("property", c -> Arrays.asList("create", "buy", "delete", "gui", "me", "change price", "view"));
 
         manager.registerCommand(new PropertyCmd());
+        manager.registerCommand(new ReceiptCmd());
 
         manager.setDefaultExceptionHandler((command, registeredCommand, sender, args, t) -> {
             plugin.getLogger().warning("Error occured while executing command: " + command.getName());

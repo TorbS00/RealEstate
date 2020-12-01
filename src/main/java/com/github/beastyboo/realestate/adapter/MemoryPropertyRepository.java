@@ -143,6 +143,13 @@ public class MemoryPropertyRepository implements PropertyRepository {
 
     @Override
     public boolean viewTargetPropertiesGUI(Player player, Player target) {
+
+        Optional<PropertyPlayer> propertyPlayer = RealEstateAPI.getINSTANCE().getPropertyPlayerByID(target.getUniqueId());
+
+        if(!propertyPlayer.isPresent()) {
+            return false;
+        }
+
         final Map<Integer, Property> propertyBySlot = new HashMap<>();
         final Inventory inventory = Bukkit.createInventory(new PropertyInventoryHolder(propertyBySlot), 54, "§c" + target.getName() + "'s Properties");
         this.drawTargetPropertyInventory(target, inventory, propertyBySlot);
