@@ -1,7 +1,7 @@
 package com.github.beastyboo.realestate.adapter;
 
 import com.github.beastyboo.realestate.application.RealEstate;
-import com.github.beastyboo.realestate.config.RealEstateAPI;
+import com.github.beastyboo.realestate.entry.RealEstateAPI;
 import com.github.beastyboo.realestate.domain.entity.PropertyPlayer;
 import com.github.beastyboo.realestate.domain.entity.Receipt;
 import com.github.beastyboo.realestate.domain.holder.ReceiptInventoryHolder;

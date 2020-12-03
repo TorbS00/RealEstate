@@ -3,12 +3,17 @@ package com.github.beastyboo.realestate.application;
 import co.aikar.commands.PaperCommandManager;
 import com.github.beastyboo.realestate.command.PropertyCmd;
 import com.github.beastyboo.realestate.command.ReceiptCmd;
-import com.github.beastyboo.realestate.config.RealEstateAPI;
+import com.github.beastyboo.realestate.config.MyConfig;
+import com.github.beastyboo.realestate.config.MyConfigManager;
+import com.github.beastyboo.realestate.domain.port.MessagePort;
+import com.github.beastyboo.realestate.entry.RealEstateAPI;
+import com.github.beastyboo.realestate.util.MessageType;
 import me.ryanhamshire.GriefPrevention.DataStore;
 import me.ryanhamshire.GriefPrevention.GriefPrevention;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -20,12 +25,22 @@ public class RealEstate {
     private final JavaPlugin plugin;
     private final RealEstateAPI api;
     private final PaperCommandManager manager;
+    private final MyConfigManager<MyConfig> configManager;
+    private final MyConfigManager<MessagePort> messageManager;
+    private final MyConfig config;
+    private final MessagePort message;
     private Economy economy;
 
     public RealEstate(JavaPlugin plugin) {
         this.plugin = plugin;
         api = new RealEstateAPI(this);
         manager = new PaperCommandManager(plugin);
+        configManager = MyConfigManager.create(plugin.getDataFolder().toPath(), "config.yml", MyConfig.class);
+        messageManager = MyConfigManager.create(plugin.getDataFolder().toPath(), "message.yml", MessagePort.class);
+        configManager.reloadConfig();
+        messageManager.reloadConfig();
+        config = configManager.getConfigData();
+        message = messageManager.getConfigData();
         economy = null;
     }
 
@@ -81,7 +96,18 @@ public class RealEstate {
             plugin.getLogger().warning("Error occured while executing command: " + command.getName());
             return false;
         });
+    }
 
+    public void sendMessage(Player player, MessageType type) {
+        if(config.prefixChatOnCommands() == true) {
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&', config.serverPrefix() + " " +  message.messages().get(type)));
+        } else {
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&', message.messages().get(type)));
+        }
+    }
+
+    public MyConfig getConfig() {
+        return config;
     }
 
     public DataStore getGriefPrevention() {

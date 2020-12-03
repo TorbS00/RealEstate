@@ -4,8 +4,7 @@ import co.aikar.commands.BaseCommand;
 import co.aikar.commands.CommandHelp;
 import co.aikar.commands.annotation.*;
 import co.aikar.commands.bukkit.contexts.OnlinePlayer;
-import com.github.beastyboo.realestate.config.RealEstateAPI;
-import org.bukkit.command.CommandSender;
+import com.github.beastyboo.realestate.entry.RealEstateAPI;
 import org.bukkit.entity.Player;
 
 /**

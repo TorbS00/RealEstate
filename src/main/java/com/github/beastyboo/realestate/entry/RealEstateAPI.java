@@ -1,4 +1,4 @@
-package com.github.beastyboo.realestate.config;
+package com.github.beastyboo.realestate.entry;
 
 import com.github.beastyboo.realestate.adapter.MemoryPropertyPlayerRepository;
 import com.github.beastyboo.realestate.adapter.MemoryPropertyRepository;

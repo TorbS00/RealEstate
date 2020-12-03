@@ -1,11 +1,12 @@
 package com.github.beastyboo.realestate.adapter;
 
 import com.github.beastyboo.realestate.application.RealEstate;
-import com.github.beastyboo.realestate.config.RealEstateAPI;
+import com.github.beastyboo.realestate.entry.RealEstateAPI;
 import com.github.beastyboo.realestate.domain.entity.Property;
 import com.github.beastyboo.realestate.domain.entity.PropertyPlayer;
 import com.github.beastyboo.realestate.domain.holder.PropertyInventoryHolder;
 import com.github.beastyboo.realestate.domain.port.PropertyRepository;
+import com.github.beastyboo.realestate.util.MessageType;
 import com.github.beastyboo.realestate.util.RealEstateUtil;
 import me.ryanhamshire.GriefPrevention.Claim;
 import net.milkbowl.vault.economy.Economy;
@@ -48,12 +49,14 @@ public class MemoryPropertyRepository implements PropertyRepository {
         Optional<Property> property = this.getPropertyByLocation(location);
 
         if(property.isPresent()) {
+            core.sendMessage(player, MessageType.PROPERTY_ALREADY_EXIST);
             return false;
         }
 
         Claim claim = core.getGriefPrevention().getClaimAt(location, false, null);
 
         if(claim.ownerID != player.getUniqueId()) {
+            core.sendMessage(player, MessageType.PROPERTY_NOT_CLAIM_OWNER);
             return false;
         }
 
@@ -63,6 +66,8 @@ public class MemoryPropertyRepository implements PropertyRepository {
         Property newProperty = new Property.Builder(name, claim.ownerID, claim, price, player.getLocation()).build();
         propertyPlayer.get().getProperties().add(newProperty);
         propertyMemory.put(newProperty.getId(), newProperty);
+
+        core.sendMessage(player, MessageType.PROPERTY_CREATED);
         return true;
     }
 
@@ -71,16 +76,20 @@ public class MemoryPropertyRepository implements PropertyRepository {
         Optional<Property> property = this.getPropertyByLocation(location);
 
         if(!property.isPresent()) {
+            core.sendMessage(player, MessageType.PROPERTY_NOT_FOUND);
             return false;
         }
 
         if(player.getUniqueId() != property.get().getSeller() || !player.isOp()) {
+            core.sendMessage(player, MessageType.PROPERTY_NOT_CLAIM_OWNER);
             return false;
         }
 
         Optional<PropertyPlayer> propertyPlayer = RealEstateAPI.getINSTANCE().getPropertyPlayerByID(property.get().getSeller());
         propertyPlayer.get().getProperties().remove(property.get());
         propertyMemory.remove(property.get().getId(), property.get());
+
+        core.sendMessage(player, MessageType.PROPERTY_DELETE);
         return true;
     }
 
@@ -89,16 +98,19 @@ public class MemoryPropertyRepository implements PropertyRepository {
         Optional<Property> property = this.getPropertyByLocation(location);
 
         if(!property.isPresent()) {
+            core.sendMessage(player, MessageType.PROPERTY_NOT_FOUND);
             return false;
         }
 
         if(player.getUniqueId() == property.get().getSeller()) {
+            core.sendMessage(player, MessageType.PROPERTY_SELLER_IS_BUYER);
             return false;
         }
 
         double price = property.get().getPrice();
 
         if(econ.getBalance(player) < price) {
+            core.sendMessage(player, MessageType.PROPERTY_NOT_ENOUGH_MONEY);
             return false;
         }
 
@@ -110,8 +122,9 @@ public class MemoryPropertyRepository implements PropertyRepository {
         RealEstateAPI.getINSTANCE().createReceipt(player.getUniqueId(), property.get().getSeller(), price, date);
         Optional<PropertyPlayer> propertySeller = RealEstateAPI.getINSTANCE().getPropertyPlayerByID(property.get().getSeller());
         propertySeller.get().getProperties().remove(property.get());
-
         propertyMemory.remove(property.get().getId(), property.get());
+
+        core.sendMessage(player, MessageType.PROPERTY_BOUGHT);
         return true;
     }
 
@@ -120,14 +133,17 @@ public class MemoryPropertyRepository implements PropertyRepository {
         Optional<Property> property = this.getPropertyByLocation(location);
 
         if(!property.isPresent()) {
+            core.sendMessage(player, MessageType.PROPERTY_NOT_FOUND);
             return false;
         }
 
         if(player.getUniqueId() != property.get().getSeller() || !player.isOp()) {
+            core.sendMessage(player, MessageType.PROPERTY_NOT_CLAIM_OWNER);
             return false;
         }
 
         property.get().setPrice(price);
+        core.sendMessage(player, MessageType.PROPERTY_PRICE_CHANGED);
         return true;
     }
 

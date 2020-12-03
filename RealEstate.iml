@@ -56,5 +56,7 @@
     <orderEntry type="library" name="Maven: com.sk89q.lib:jlibnoise:1.0.0" level="project" />
     <orderEntry type="library" name="Maven: net.milkbowl.vault:VaultAPI:1.6" level="project" />
     <orderEntry type="library" name="Maven: co.aikar:acf-paper:0.5.0-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Maven: space.arim.dazzleconf:dazzleconf-ext-snakeyaml:1.1.0-M1" level="project" />
+    <orderEntry type="library" name="Maven: space.arim.dazzleconf:dazzleconf-core:1.1.0-M1" level="project" />
   </component>
 </module>

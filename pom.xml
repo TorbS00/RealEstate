@@ -40,11 +40,15 @@
                     <relocations>
                         <relocation>
                             <pattern>co.aikar.commands</pattern>
-                            <shadedPattern>com.github.beastyboo.acf</shadedPattern> <!-- Replace this -->
+                            <shadedPattern>com.github.beastyboo.acf</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>co.aikar.locales</pattern>
-                            <shadedPattern>com.github.beastyboo.locales</shadedPattern> <!-- Replace this -->
+                            <shadedPattern>com.github.beastyboo.locales</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>space.arim.dazzleconf</pattern>
+                            <shadedPattern>com.github.beastyboo.dazzleconf</shadedPattern>
                         </relocation>
                     </relocations>
                 </configuration>
@@ -86,6 +90,10 @@
             <id>aikar</id>
             <url>https://repo.aikar.co/content/groups/aikar/</url>
         </repository>
+        <repository>
+            <id>dazzleconf-repo</id>
+            <url>https://mvn-repo.arim.space/lesser-gpl3/</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -110,6 +118,11 @@
             <groupId>co.aikar</groupId>
             <artifactId>acf-paper</artifactId>
             <version>0.5.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>space.arim.dazzleconf</groupId>
+            <artifactId>dazzleconf-ext-snakeyaml</artifactId>
+            <version>1.1.0-M1</version>
         </dependency>
     </dependencies>
 </project>
