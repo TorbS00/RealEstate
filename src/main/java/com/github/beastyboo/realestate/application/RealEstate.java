@@ -87,8 +87,6 @@ public class RealEstate {
     private void registerCommands(PaperCommandManager manager) {
         manager.enableUnstableAPI("help");
 
-        //manager.getCommandCompletions().registerAsyncCompletion("property", c -> Arrays.asList("create", "buy", "delete", "gui", "me", "change price", "view"));
-
         manager.registerCommand(new PropertyCmd());
         manager.registerCommand(new ReceiptCmd());
 
