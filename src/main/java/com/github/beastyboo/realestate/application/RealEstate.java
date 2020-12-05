@@ -58,6 +58,7 @@ public class RealEstate {
             plugin.getServer().getPluginManager().disablePlugin(plugin);
             return;
         }
+
         this.registerCommands(manager);
 
         RealEstateAPI.getINSTANCE().load();

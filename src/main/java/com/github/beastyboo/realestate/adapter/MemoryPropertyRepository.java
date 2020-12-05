@@ -33,14 +33,12 @@ public class MemoryPropertyRepository implements PropertyRepository {
     private final Map<UUID, Property> propertyMemory;
     private final Gson gson;
     private final File folder;
-    private final Economy econ;
 
     public MemoryPropertyRepository(RealEstate core) {
         this.core = core;
         propertyMemory = new HashMap<>();
         gson = this.getGson();
         folder = new File(core.getPlugin().getDataFolder(), "properties");
-        econ = core.getEconomy();
     }
 
     @Override
@@ -135,6 +133,8 @@ public class MemoryPropertyRepository implements PropertyRepository {
         }
 
         double price = property.get().getPrice();
+
+        Economy econ = core.getEconomy();
 
         if(econ.getBalance(player) < price) {
             core.sendMessage(player, MessageType.PROPERTY_NOT_ENOUGH_MONEY);
