@@ -22,6 +22,14 @@ import org.bukkit.plugin.java.JavaPlugin;
  */
 public class RealEstate {
 
+    /**
+     * TODO:
+     * 1. Simple event handler for checking which GUI they are in.
+     * 2. Reload, claim is not owner bug on GreifPrevention?
+     * 3. View your own receipts. (Selger får kvitteringen??
+     * 4. Buyer did not get trusted?
+     */
+
     private final JavaPlugin plugin;
     private final RealEstateAPI api;
     private final PaperCommandManager manager;

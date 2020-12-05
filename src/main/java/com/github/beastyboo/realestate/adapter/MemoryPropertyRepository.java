@@ -143,7 +143,8 @@ public class MemoryPropertyRepository implements PropertyRepository {
 
         econ.withdrawPlayer(player, price);
         econ.depositPlayer(Bukkit.getOfflinePlayer(property.get().getSeller()), price);
-        property.get().getClaim().allowAccess(player);
+        property.get().getClaim().allowAccess(player); //TODO: did not allow access?? property.get().getClaim().allowBuild()
+
 
         LocalDate date = LocalDate.now();
         RealEstateAPI.getINSTANCE().createReceipt(player.getUniqueId(), property.get().getSeller(), price, date);
