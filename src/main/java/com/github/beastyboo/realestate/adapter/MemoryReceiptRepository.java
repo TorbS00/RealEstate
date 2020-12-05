@@ -1,17 +1,23 @@
 package com.github.beastyboo.realestate.adapter;
 
+import com.github.beastyboo.realestate.adapter.typeadapter.PropertyPlayerTypeAdapter;
+import com.github.beastyboo.realestate.adapter.typeadapter.ReceiptTypeAdapter;
 import com.github.beastyboo.realestate.application.RealEstate;
+import com.github.beastyboo.realestate.domain.entity.Property;
 import com.github.beastyboo.realestate.entry.RealEstateAPI;
 import com.github.beastyboo.realestate.domain.entity.PropertyPlayer;
 import com.github.beastyboo.realestate.domain.entity.Receipt;
 import com.github.beastyboo.realestate.domain.holder.ReceiptInventoryHolder;
 import com.github.beastyboo.realestate.domain.port.ReceiptRepository;
 import com.github.beastyboo.realestate.util.RealEstateUtil;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
+import java.io.File;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -23,20 +29,42 @@ public class MemoryReceiptRepository implements ReceiptRepository{
 
     private final RealEstate core;
     private final Map<UUID, Receipt> receiptMemory;
+    private final Gson gson;
+    private final File folder;
 
     public MemoryReceiptRepository(RealEstate core) {
         this.core = core;
         receiptMemory = new HashMap<>();
+        gson = this.getGson();
+        folder = new File(core.getPlugin().getDataFolder(), "receipts");
     }
 
     @Override
     public void load() {
-
+        if(!folder.exists()) {
+            folder.mkdirs();
+        }
+        File[] directoryListing = folder.listFiles();
+        if (directoryListing == null) {
+            return;
+        }
+        for (File child : directoryListing) {
+            String json = RealEstateUtil.INSTANCE.loadContent(child);
+            Receipt receipt = this.deserialize(json);
+            receiptMemory.put(receipt.getId(), receipt);
+        }
     }
 
     @Override
     public void close() {
-
+        for(Receipt receipt : receiptMemory.values()) {
+            File file = new File(folder, receipt.getId().toString() + ".json");
+            if(!folder.exists()) {
+                folder.mkdirs();
+            }
+            String json = this.serialize(receipt);
+            RealEstateUtil.INSTANCE.saveFile(file, json);
+        }
     }
 
     @Override
@@ -124,6 +152,22 @@ public class MemoryReceiptRepository implements ReceiptRepository{
             receiptBySlot.put(i, receipt);
             i++;
         }
+    }
+
+    private Gson getGson() {
+        return new GsonBuilder().registerTypeAdapter(Receipt.class, new ReceiptTypeAdapter())
+                .setPrettyPrinting()
+                .serializeNulls()
+                .disableHtmlEscaping()
+                .create();
+    }
+
+    private String serialize(Receipt value) {
+        return this.gson.toJson(value);
+    }
+
+    private Receipt deserialize(String json) {
+        return this.gson.fromJson(json, Receipt.class);
     }
 
 }

@@ -16,7 +16,7 @@ public class Receipt {
     public static class Builder {
         private final UUID buyer;
         private final UUID seller;
-        private final UUID id = UUID.randomUUID();
+        private UUID id = UUID.randomUUID();
         private final double price;
         private final String date;
 
@@ -25,6 +25,11 @@ public class Receipt {
             this.seller = seller;
             this.price = price;
             this.date = date;
+        }
+
+        public Builder id (UUID val) {
+            id = val;
+            return this;
         }
 
         public Receipt build() {

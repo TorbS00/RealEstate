@@ -1,5 +1,7 @@
 package com.github.beastyboo.realestate.adapter;
 
+import com.github.beastyboo.realestate.adapter.typeadapter.PropertyPlayerTypeAdapter;
+import com.github.beastyboo.realestate.adapter.typeadapter.PropertyTypeAdapter;
 import com.github.beastyboo.realestate.application.RealEstate;
 import com.github.beastyboo.realestate.entry.RealEstateAPI;
 import com.github.beastyboo.realestate.domain.entity.Property;
@@ -8,6 +10,8 @@ import com.github.beastyboo.realestate.domain.holder.PropertyInventoryHolder;
 import com.github.beastyboo.realestate.domain.port.PropertyRepository;
 import com.github.beastyboo.realestate.util.MessageType;
 import com.github.beastyboo.realestate.util.RealEstateUtil;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import me.ryanhamshire.GriefPrevention.Claim;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
@@ -16,6 +20,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
+import java.io.File;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -26,22 +31,44 @@ public class MemoryPropertyRepository implements PropertyRepository {
 
     private final RealEstate core;
     private final Map<UUID, Property> propertyMemory;
+    private final Gson gson;
+    private final File folder;
     private final Economy econ;
 
     public MemoryPropertyRepository(RealEstate core) {
         this.core = core;
         propertyMemory = new HashMap<>();
+        gson = this.getGson();
+        folder = new File(core.getPlugin().getDataFolder(), "properties");
         econ = core.getEconomy();
     }
 
     @Override
     public void load() {
-
+        if(!folder.exists()) {
+            folder.mkdirs();
+        }
+        File[] directoryListing = folder.listFiles();
+        if (directoryListing == null) {
+            return;
+        }
+        for (File child : directoryListing) {
+            String json = RealEstateUtil.INSTANCE.loadContent(child);
+            Property property = this.deserialize(json);
+            propertyMemory.put(property.getId(), property);
+        }
     }
 
     @Override
     public void close() {
-
+        for(Property property : propertyMemory.values()) {
+            File file = new File(folder, property.getId().toString() + ".json");
+            if(!folder.exists()) {
+                folder.mkdirs();
+            }
+            String json = this.serialize(property);
+            RealEstateUtil.INSTANCE.saveFile(file, json);
+        }
     }
 
     @Override
@@ -231,4 +258,21 @@ public class MemoryPropertyRepository implements PropertyRepository {
             i++;
         }
     }
+
+    private Gson getGson() {
+        return new GsonBuilder().registerTypeAdapter(Property.class, new PropertyTypeAdapter(core))
+                .setPrettyPrinting()
+                .serializeNulls()
+                .disableHtmlEscaping()
+                .create();
+    }
+
+    private String serialize(Property value) {
+        return this.gson.toJson(value);
+    }
+
+    private Property deserialize(String json) {
+        return this.gson.fromJson(json, Property.class);
+    }
+
 }

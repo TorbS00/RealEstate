@@ -20,7 +20,7 @@ public class Property {
     public static class Builder {
         private final String name;
         private final UUID seller;
-        private final UUID id = UUID.randomUUID();
+        private UUID id = UUID.randomUUID();
         private final Claim claim;
         private final double price;
         private final Location location;
@@ -31,6 +31,11 @@ public class Property {
             this.claim = claim;
             this.price = price;
             this.location = location;
+        }
+
+        public Builder id (UUID val) {
+            id = val;
+            return this;
         }
 
         public Property build() {
